@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-List<MyWatchlist> myWatchlistFromJson(String str) => List<MyWatchlist>.from(
-    json.decode(str).map((x) => MyWatchlist.fromJson(x)));
+List<MyWatchlist> myWatchlistFromJson(String str) => List<MyWatchlist>.from(json.decode(str).map((x) => MyWatchlist.fromJson(x)));
 
-String myWatchlistToJson(List<MyWatchlist> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String myWatchlistToJson(List<MyWatchlist> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class MyWatchlist {
   MyWatchlist({
@@ -18,14 +16,14 @@ class MyWatchlist {
   Map<String, dynamic> fields;
 
   factory MyWatchlist.fromJson(Map<String, dynamic> json) => MyWatchlist(
-        model: json["model"],
-        pk: json["pk"],
-        fields: json["fields"],
-      );
+    model: json["model"],
+    pk: json["pk"],
+    fields: json["fields"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "model": model,
-        "pk": pk,
-        "fields": fields,
-      };
+    "model": model,
+    "pk": pk,
+    "fields": fields,
+  };
 }

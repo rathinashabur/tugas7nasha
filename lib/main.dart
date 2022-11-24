@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:counter_7/widget/drawer.dart';
+import 'package:counter_7/page/tambahBudget.dart';
+import 'package:counter_7/page/dataBudget.dart';
+import 'package:counter_7/page/mywatchlistPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,6 +25,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
+
   final String title;
 
   @override
@@ -50,7 +53,56 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      drawer: const NavigationDrawer(),
+      drawer: Drawer(
+      child: Column(
+        children: [
+          // Add clickable menu
+          const Padding(
+                padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+              ),
+          ListTile(
+            title: const Text('counter_7'),
+            onTap: () {
+              // Routing menu ke halaman utama
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Home Page',)),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Tambah Budget'),
+            onTap: () {
+              // Routing menu ke halaman form
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const TambahBudgetPage()),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Data Budget'),
+            onTap: () {
+              // Routing menu ke halaman form
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const DataBudgetPage()),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('My Watchlist'),
+            onTap: () {
+              // Route menu ke halaman watchlist
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const MyWatchlistPage()),
+              );
+            },
+          ),
+        ],
+      ),
+    ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

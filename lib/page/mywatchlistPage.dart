@@ -12,6 +12,7 @@ import 'dart:convert';
 class MyWatchlistPage extends StatefulWidget {
   const MyWatchlistPage({super.key});
 
+  final String title = "My Watchlist";
 
   @override
   State<MyWatchlistPage> createState() => _MyWatchlistPageState();
@@ -28,10 +29,10 @@ class _MyWatchlistPageState extends State<MyWatchlistPage> {
       },
     );
 
-    // Decode response menjadi json
+    // melakukan decode response menjadi bentuk json
     var data = jsonDecode(utf8.decode(response.bodyBytes));
 
-    // Mengkonversi data json menjadi object MyWatchList
+    // melakukan konversi data json menjadi object MyWatchList
     List<MyWatchlist> myWatchlist = [];
 
     for (var d in data) {
@@ -47,7 +48,7 @@ class _MyWatchlistPageState extends State<MyWatchlistPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Watch List'),
+        title: Text(widget.title),
       ),
       drawer: Drawer(
         child: Column(
@@ -110,7 +111,7 @@ class _MyWatchlistPageState extends State<MyWatchlistPage> {
                 return Column(
                   children: const [
                     Text(
-                      "Belum ada isi Watchlist :(",
+                      "Tidak ada Watchlist :(",
                       style: TextStyle(color: Color(0xff59A5D8), fontSize: 20),
                     ),
                     SizedBox(height: 8),

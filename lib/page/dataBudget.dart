@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:counter_7/widget/drawer.dart';
-import 'package:counter_7/page/budget.dart';
+import 'package:counter_7/main.dart';
+import 'package:counter_7/page/tambahBudget.dart';
+import 'package:counter_7/page/mywatchlistPage.dart';
 
 class DataBudgetPage extends StatefulWidget {
   const DataBudgetPage({super.key});
@@ -10,27 +11,123 @@ class DataBudgetPage extends StatefulWidget {
 }
 
 class _DataBudgetPageState extends State<DataBudgetPage> {
+
+  // Save data ke dalam list
+  static List<String> listJudul = [];
+  static List<String> listJenis = [];
+  static List<int> listNominal = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Data Budget'),
-        ),
-        drawer: const NavigationDrawer(),
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              children: Budget.budgets.map((budget) {
-                return Card(
-                  child: ListTile(
-                      title: Text("${budget.judul}\n${budget.nominal}"),
-                      subtitle: Text(budget.date.toString().split(' ')[0]),
-                      trailing: Text(budget.tipe)),
-                );
-              }).toList(),
-            ),
+      appBar: AppBar(
+        title: const Text('Data Budget'),
+      ),
+      
+      drawer: Drawer(
+      child: Column(
+        children: [
+          // Add clickable menu
+          const Padding(
+                padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+              ),
+          ListTile(
+            title: const Text('counter_7'),
+            onTap: () {
+              // Routing menu ke halaman utama
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Homepage',)),
+              );
+            },
           ),
-        ));
+          ListTile(
+            title: const Text('Tambah Budget'),
+            onTap: (){
+              // Routing menu ke halaman form
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const TambahBudgetPage()),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Daftar Budget'),
+            onTap: () {
+              // Routing menu ke halaman form
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const DataBudgetPage()),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('My Watchlist'),
+            onTap: () {
+              // Route menu ke halaman My Watchlist
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const MyWatchlistPage()),
+              );
+            },
+          ),
+        ],
+      ),
+    ),
+
+      body:ListView.builder(
+        itemBuilder: (context, index) {
+          return Card(
+            child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children:[
+
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                            listJudul[index], style: const TextStyle(fontSize: 27),
+                            textAlign: TextAlign.left),
+                      ),
+                    ),
+
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(listNominal[index].toString(), style: TextStyle(fontSize: 17),
+                                  textAlign: TextAlign.left),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Align(
+                              alignment: Alignment.topRight,
+                              child: Text(listJenis[index], style: TextStyle(fontSize: 17),
+                                  textAlign: TextAlign.right),
+                            ),
+                          ),
+                        ]
+                    ),
+                  ],
+                )
+            ),
+          );
+        },
+        itemCount: listJudul.length,
+      ),
+    );
   }
+}
+
+void dataInputBudget(String judul, int nominal, String jenis){
+  _DataBudgetPageState.listJudul.add(judul);
+  _DataBudgetPageState.listJenis.add(jenis);
+  _DataBudgetPageState.listNominal.add(nominal);
 }
