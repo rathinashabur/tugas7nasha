@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:counter_7/main.dart';
-import 'package:counter_7/tambahBudget.dart';
-import 'package:counter_7/dataBudget.dart';
+import 'package:counter_7/page/tambahBudget.dart';
+import 'package:counter_7/page/dataBudget.dart';
+import 'package:counter_7/page/mywatchlistPage.dart';
 
 class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer({Key? key}) : super(key: key);
@@ -51,6 +52,17 @@ class NavigationDrawer extends StatelessWidget {
               // Route menu ke halaman data budget
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const DataBudgetPage()),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('My Watchlist'),
+            onTap: () {
+              // Route menu ke halaman My Watchlist
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const MyWatchlistPage()),
               );
             },
           ),

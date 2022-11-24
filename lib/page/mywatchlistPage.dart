@@ -1,0 +1,153 @@
+import 'package:counter_7/page/tambahBudget.dart';
+import 'package:counter_7/page/dataBudget.dart';
+import 'package:counter_7/main.dart';
+import 'package:counter_7/model/mywatchlist.dart';
+import 'package:counter_7/page/details.dart';
+
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import 'dart:convert';
+
+class MyWatchlistPage extends StatefulWidget {
+  const MyWatchlistPage({super.key});
+
+
+  @override
+  State<MyWatchlistPage> createState() => _MyWatchlistPageState();
+}
+
+class _MyWatchlistPageState extends State<MyWatchlistPage> {
+  Future<List<MyWatchlist>> fetchMyWatchlist() async {
+    var url = Uri.parse('https://nashatugaspbp.herokuapp.com/mywatchlist/json/');
+    var response = await http.get(
+      url,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+    );
+
+    // Decode response menjadi json
+    var data = jsonDecode(utf8.decode(response.bodyBytes));
+
+    // Mengkonversi data json menjadi object MyWatchList
+    List<MyWatchlist> myWatchlist = [];
+
+    for (var d in data) {
+      if (d != null) {
+        myWatchlist.add(MyWatchlist.fromJson(d));
+      }
+    }
+
+    return myWatchlist;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Watch List'),
+      ),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            // Menambahkan clickable menu
+            ListTile(
+              title: const Text('Tugas'),
+              onTap: () {
+                // Route menu ke halaman utama
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const MyHomePage(title:"Homepage")),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Tambah Budget'),
+              onTap: () {
+                // Route menu ke halaman tambah budget
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const TambahBudgetPage()),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Data Budget'),
+              onTap: () {
+                // Route menu ke halaman data budget
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const DataBudgetPage()),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('My Watchlist'),
+              onTap: () {
+                // Route menu ke halaman My Watchlist
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const MyWatchlistPage()),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+      body: FutureBuilder(
+          future: fetchMyWatchlist(),
+          builder: (context, AsyncSnapshot snapshot) {
+            if (snapshot.data == null) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              if (!snapshot.hasData) {
+                return Column(
+                  children: const [
+                    Text(
+                      "Belum ada isi Watchlist :(",
+                      style: TextStyle(color: Color(0xff59A5D8), fontSize: 20),
+                    ),
+                    SizedBox(height: 8),
+                  ],
+                );
+              } else {
+                return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (_, index) => Card(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DetailWatchlistPage(
+                                      fields: snapshot.data![index].fields),
+                                ));
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(13),
+                                child: Text(
+                                  "${snapshot.data![index].fields['title']}",
+                                  style: const TextStyle(
+                                    fontSize: 17.0,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        )));
+              }
+            }
+          }),
+    );
+  }
+}
